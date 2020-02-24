@@ -45,7 +45,7 @@ bot = commands.Bot(command_prefix=config['bot']['prefix'])
 async def on_ready():
     logging.info(f'\n\nBot en cours de fonctionnemnt en tant que: {bot.user.name} - {bot.user.id}\n'
           f'Version de discord.py: {discord.__version__}\n')
-    game = discord.Game(name="gérer le serveur de FANTASIA -- !help")
+    game = discord.Game(name="gérer le serveur de Fantasya -- !help")
     await bot.change_presence(activity=game, status=discord.Status.online)
     logging.info(f'Bot prêt pour observer le RP !')
     while True:
