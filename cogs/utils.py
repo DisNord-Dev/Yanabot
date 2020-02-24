@@ -148,7 +148,7 @@ class Utils(commands.Cog):
 
     
     @commands.command()
-    @commands.has_role("Conseil des Divins")
+    @commands.has_role(678972972802768896)
     async def speakgm(self, ctx, * , message:str="None"):
         if message == "None":
             return await ctx.send("Votre message ne contient pas de texte, merci de retaper la commande !", delete_after=10)
@@ -157,7 +157,7 @@ class Utils(commands.Cog):
     
 
     @commands.command()
-    @commands.has_role("Conseil des Divins")
+    @commands.has_role(678972972802768896)
     async def speakstaff(self, ctx, anon:str="None", *, message:str="None"):
         if message == "None":
             return await ctx.send("Votre message ne contient pas de texte, merci de retaper la commande !", delete_after=10)
