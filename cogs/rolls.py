@@ -89,6 +89,7 @@ class Rolls(commands.Cog):
 
     @commands.command()
     async def action(self, ctx):
+        """Faire une action simple avec un roll 100"""
         num = random.randrange(1, 100, 1)
         if num < 5:
             return await ctx.send("<a:blobrainbowdanse:680102742714220625> | Réussite Critique !!!")
@@ -102,28 +103,33 @@ class Rolls(commands.Cog):
 
     @commands.group()
     async def roll(self, ctx):
+        """Faire un roll complexe avec des stats défini"""
         if ctx.invoked_subcommand is None:
-            await ctx.send(":x: Il faut choisir entre physique, mental ou social !")
+            await ctx.send(":x: Mauvaise commande, faite !help roll dans un channel de bot pour de l'aide !")
 
 
     @roll.command()
     async def physique(self, ctx):
+        """Faire un roll avec la stat physique"""
         await roll_stats(self, ctx, "physique")
     
 
     @roll.command()
     async def mental(self, ctx):
+        """Faire un roll avec la stat mental"""
         await roll_stats(self, ctx, "mental")
 
 
     @roll.command()
     async def social(self, ctx):
+        """Faire un roll avec la stat social"""
         await roll_stats(self, ctx, "social")
 
 
     @roll.command()
     @commands.has_role(678972972802768896)
     async def init(self, ctx, member:discord.Member, value1:int=0, value2:int=0, value3:int=0):
+        """Initialiser les stats d'un utilisateur (Modérateur uniquement)"""
         logging.info(str(value1) + ' ' + str(value2) + ' ' + str(value3))
         verify = True
         if value1 == 0:
@@ -147,6 +153,7 @@ class Rolls(commands.Cog):
     @roll.command()
     @commands.has_role(678972972802768896)
     async def change(self, ctx, member:discord.Member, row:str="None", value:int=0):
+        """Changer une valeur dans la base de données (Modérateur uniquement)"""
         supported_row = ["physique", "mental", "social", "rang"]
         if row in supported_row:
             idu = member.id
@@ -162,6 +169,7 @@ class Rolls(commands.Cog):
 
     @roll.command()
     async def up(self, ctx, row:str="None"):
+        """Apliquer le ou les rang up à une de vos stats"""
         supported_row = ["physique", "mental", "social"]
         if row in supported_row:
             result = await get_and_verify_eligibility(self, ctx)
@@ -197,23 +205,24 @@ class Rolls(commands.Cog):
     
     @roll.command()
     async def stats(self, ctx):
-            user = ctx.author
-            idu = user.id
-            mycursor = mydb.cursor()
-            sql = """SELECT * FROM stats_user WHERE idu=%s"""
-            val = (idu,)
-            mycursor.execute(sql, val)
-            respond = mycursor.fetchall()
-            respond = respond[0]
-            phy = str(respond[1])
-            men = str(respond[2])
-            soc = str(respond[3])
-            embed=discord.Embed(title="Stats roll de " + user.name + "#" + user.discriminator, color=0x0080ff)
-            embed.set_thumbnail(url=user.avatar_url)
-            embed.add_field(name="Physique", value=phy, inline=True)
-            embed.add_field(name="Mental", value=men, inline=True)
-            embed.add_field(name="Social", value=soc, inline=True)
-            await ctx.send(embed=embed)
+        """Voir vos stats de rolls"""
+        user = ctx.author
+        idu = user.id
+        mycursor = mydb.cursor()
+        sql = """SELECT * FROM stats_user WHERE idu=%s"""
+        val = (idu,)
+        mycursor.execute(sql, val)
+        respond = mycursor.fetchall()
+        respond = respond[0]
+        phy = str(respond[1])
+        men = str(respond[2])
+        soc = str(respond[3])
+        embed=discord.Embed(title="Stats roll de " + user.name + "#" + user.discriminator, color=0x0080ff)
+        embed.set_thumbnail(url=user.avatar_url)
+        embed.add_field(name="Physique", value=phy, inline=True)
+        embed.add_field(name="Mental", value=men, inline=True)
+        embed.add_field(name="Social", value=soc, inline=True)
+        await ctx.send(embed=embed)
 
         
 def setup(bot):
