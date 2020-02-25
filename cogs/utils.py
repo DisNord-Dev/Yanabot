@@ -150,6 +150,7 @@ class Utils(commands.Cog):
     @commands.command()
     @commands.has_role(678972972802768896)
     async def speakgm(self, ctx, * , message:str="None"):
+        """Parler via le bot en tant que Narateur"""
         if message == "None":
             return await ctx.send("Votre message ne contient pas de texte, merci de retaper la commande !", delete_after=10)
         await ctx.send("**💬 [Narateur] {}**: {}".format(ctx.author.name, message))
@@ -159,6 +160,7 @@ class Utils(commands.Cog):
     @commands.command()
     @commands.has_role(678972972802768896)
     async def speakstaff(self, ctx, anon:str="None", *, message:str="None"):
+        """Parler via le bot en tant que Staff"""
         if message == "None":
             return await ctx.send("Votre message ne contient pas de texte, merci de retaper la commande !", delete_after=10)
         if anon == "anon":
@@ -172,6 +174,7 @@ class Utils(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def shutdown(self, ctx):
+        """Le bouton d'auto destruction"""
         await ctx.send("OK, je vais m'éteindre tranquillement !")
         await ctx.bot.logout()
 
