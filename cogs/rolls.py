@@ -21,19 +21,15 @@ import json
 import logging
 import random
 import mysql.connector
+import utils.dbutils
 with open('config.json', 'r') as fichier:
     config = json.load(fichier)
-mydb = mysql.connector.connect(
-  host=config['mysql']['host'],
-  user=config['mysql']['user'],
-  passwd=config['mysql']['passwd'],
-  database=config['mysql']['dbname']
-)
 
 async def roll_stats(self, ctx, row:str="None"):
         if row == "None":
             return logging.warn("NANI, le bot ne fonctione pas bien !!! (Raison: "
             "Pas de variable pour roll_stats")
+        mydb = utils.dbutils.init_connection()
         mycursor = mydb.cursor()
         idu = ctx.author.id
         sql = """SELECT {} FROM stats_user WHERE idu=%s""".format(row)
@@ -45,6 +41,7 @@ async def roll_stats(self, ctx, row:str="None"):
             return await ctx.send(":x: Tu sait, les fiches c'est pas pour les nuls !")
         num = random.randrange(1, 100, 1)
         logging.info(num)
+        utils.dbutils.close_connection(mydb)
         if respond > num:
             return await ctx.send("<a:bongocat:680115938019901629> | Réussite !")
         else:
@@ -66,6 +63,7 @@ async def get_and_verify_eligibility(self, ctx):
             role = role.split()
             role = role[1]
             role = int(role)
+            mydb = utils.dbutils.init_connection()
             mycursor = mydb.cursor()
             idu = ctx.author.id
             sql = """SELECT rang FROM stats_user WHERE idu=%s"""
@@ -73,6 +71,7 @@ async def get_and_verify_eligibility(self, ctx):
             mycursor.execute(sql, val)
             respond = [r[0] for r in mycursor.fetchall()]
             respond = respond[0]
+            utils.dbutils.close_connection(mydb)
             if role > respond:
                 return True
             else:
@@ -141,12 +140,14 @@ class Rolls(commands.Cog):
         if verify == False:
             return await ctx.send(":x: Tu sait, trois valeurs, c'est tout ce que je demande ! MAIS TU LES MET PAS !!!")
         else:
+            mydb = utils.dbutils.init_connection()
             mycursor = mydb.cursor()
             idu = member.id
             sql = """INSERT INTO stats_user (idu, physique, mental, social, rang) VALUES (%s, %s, %s, %s, %s)"""
             val = (idu, value1, value2, value3, 1,)
             mycursor.execute(sql, val)
             mydb.commit()
+            utils.dbutils.close_connection(mydb)
             return await ctx.send(":white_check_mark: Fait, le joueur " + member.mention + " peut jouer avec ses rolls !")
             
 
@@ -157,11 +158,13 @@ class Rolls(commands.Cog):
         supported_row = ["physique", "mental", "social", "rang"]
         if row in supported_row:
             idu = member.id
+            mydb = utils.dbutils.init_connection()
             mycursor = mydb.cursor()
             sql = """UPDATE stats_user SET {}=%s WHERE idu=%s""".format(row)
             val = (value, idu,)
             mycursor.execute(sql, val)
             mydb.commit()
+            utils.dbutils.close_connection(mydb)
             return await ctx.send(":white_check_mark: Fait, la valeur {} a été changée en {}".format(row, str(value)))
         else:
             return await ctx.send(":x: Faut choisir entre physique, mental, social ou rang mais pas ce que tu demande !")
@@ -174,6 +177,7 @@ class Rolls(commands.Cog):
         if row in supported_row:
             result = await get_and_verify_eligibility(self, ctx)
             if result == True:
+                mydb = utils.dbutils.init_connection()
                 mycursor = mydb.cursor()
                 idu = ctx.author.id
                 sql = """SELECT {} FROM stats_user WHERE idu=%s""".format(row)
@@ -196,6 +200,7 @@ class Rolls(commands.Cog):
                 val = (respond, idu,)
                 mycursor.execute(sql, val)
                 mydb.commit()
+                utils.dbutils.close_connection(mydb)
                 return await ctx.send(":white_check_mark: Vous avez level up de 10 la capacité {} !".format(row))
             else:
                 return await ctx.send(":x: On peut pas parce que vous n'avez pas rang up, i am so sad !")
@@ -208,11 +213,13 @@ class Rolls(commands.Cog):
         """Voir vos stats de rolls"""
         user = ctx.author
         idu = user.id
+        mydb = utils.dbutils.init_connection()
         mycursor = mydb.cursor()
         sql = """SELECT * FROM stats_user WHERE idu=%s"""
         val = (idu,)
         mycursor.execute(sql, val)
         respond = mycursor.fetchall()
+        utils.dbutils.close_connection(mydb)
         respond = respond[0]
         phy = str(respond[1])
         men = str(respond[2])
