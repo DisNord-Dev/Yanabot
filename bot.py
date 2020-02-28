@@ -15,7 +15,6 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-
 import sys, traceback
 import discord
 from discord.ext import commands
@@ -35,7 +34,7 @@ token = config['bot']['token']
 
 
 initial_extensions = ['jishaku',
-                      'cogs.utils',
+                      'cogs.misc',
                       'cogs.actions',
                       'cogs.rolls']
 bot = commands.Bot(command_prefix=config['bot']['prefix'])
@@ -61,5 +60,6 @@ if __name__ == '__main__':
         except Exception as e:
             print(f'Failed to load extension {extension}.', file=sys.stderr)
             traceback.print_exc()
+
 
 bot.run(token, bot=True, reconnect=True)

@@ -42,9 +42,13 @@ async def roll_stats(self, ctx, row:str="None"):
         num = random.randrange(1, 100, 1)
         logging.info(num)
         utils.dbutils.close_connection(mydb)
-        if respond > num:
+        if num <= 5:
+            return await ctx.send("<a:blobrainbowdanse:680102742714220625> | Réussite Critique !!!")
+        elif num >= 95:
+            return await ctx.send("<a:catno:680102811740143624> | Echec Critique !!!")    
+        elif respond > num:
             return await ctx.send("<a:bongocat:680115938019901629> | Réussite !")
-        else:
+        elif respond < num:
             return await ctx.send("<a:clapnul:680115868004515934> | Echec !")
         
 
@@ -90,7 +94,7 @@ class Rolls(commands.Cog):
     async def action(self, ctx):
         """Faire une action simple avec un roll 100"""
         num = random.randrange(1, 100, 1)
-        if num < 5:
+        if num <= 5:
             return await ctx.send("<a:blobrainbowdanse:680102742714220625> | Réussite Critique !!!")
         elif num < 50:
             return await ctx.send("<a:bongocat:680115938019901629> | Réussite !")
