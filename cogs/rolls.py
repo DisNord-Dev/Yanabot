@@ -24,6 +24,7 @@ import mysql.connector
 import utils.dbutils
 with open('config.json', 'r') as fichier:
     config = json.load(fichier)
+    
 
 async def roll_stats(self, ctx, row:str="None"):
         if row == "None":
@@ -127,6 +128,24 @@ class Rolls(commands.Cog):
     async def social(self, ctx):
         """Faire un roll avec la stat social"""
         await roll_stats(self, ctx, "social")
+
+
+    @commands.command(name="physique")
+    async def physiquep(self, ctx):
+        """Faire un roll avec la stat physique"""
+        await roll_stats(self, ctx, "physique")
+
+
+    @commands.command(name="mental")
+    async def mentalp(self, ctx):
+        """Faire un roll avec la stat mental"""
+        await roll_stats(self, ctx, "mental")
+
+
+    @commands.command(name="social")
+    async def socialp(self, ctx):
+        """Faire un roll avec la stat social"""
+        await roll_stats(self, ctx, "social") 
 
 
     @roll.command()
