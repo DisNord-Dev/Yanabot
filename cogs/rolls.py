@@ -106,6 +106,7 @@ class Rolls(commands.Cog):
     
 
     @commands.group()
+    @utils.checks.iflevelisuporequal(1)
     async def roll(self, ctx):
         """Faire un roll complexe avec des stats défini"""
         if ctx.invoked_subcommand is None:
@@ -131,25 +132,28 @@ class Rolls(commands.Cog):
 
 
     @commands.command(name="physique")
+    @utils.checks.iflevelisuporequal(1)
     async def physiquep(self, ctx):
         """Faire un roll avec la stat physique"""
         await roll_stats(self, ctx, "physique")
 
 
     @commands.command(name="mental")
+    @utils.checks.iflevelisuporequal(1)
     async def mentalp(self, ctx):
         """Faire un roll avec la stat mental"""
         await roll_stats(self, ctx, "mental")
 
 
     @commands.command(name="social")
+    @utils.checks.iflevelisuporequal(1)
     async def socialp(self, ctx):
         """Faire un roll avec la stat social"""
         await roll_stats(self, ctx, "social") 
 
 
     @roll.command()
-    @commands.has_role(678972972802768896)
+    @utils.checks.iflevelisuporequal(4)
     async def init(self, ctx, member:discord.Member, value1:int=0, value2:int=0, value3:int=0):
         """Initialiser les stats d'un utilisateur (Modérateur uniquement)"""
         logging.info(str(value1) + ' ' + str(value2) + ' ' + str(value3))
@@ -175,7 +179,7 @@ class Rolls(commands.Cog):
             
 
     @roll.command()
-    @commands.has_role(678972972802768896)
+    @utils.checks.iflevelisuporequal(4)
     async def change(self, ctx, member:discord.Member, row:str="None", value:int=0):
         """Changer une valeur dans la base de données (Modérateur uniquement)"""
         supported_row = ["physique", "mental", "social", "rang"]
@@ -232,9 +236,10 @@ class Rolls(commands.Cog):
             
     
     @roll.command()
-    async def stats(self, ctx):
+    async def stats(self, ctx, user:discord.Member=None):
         """Voir vos stats de rolls"""
-        user = ctx.author
+        if user is None:
+            user = ctx.author
         idu = user.id
         mydb = utils.dbutils.init_connection()
         mycursor = mydb.cursor()

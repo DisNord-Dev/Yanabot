@@ -23,6 +23,7 @@ from xml.etree import ElementTree as ET
 import logging
 from phabricator import Phabricator
 import schedule
+import utils.checks
 
 
 class Utils(commands.Cog):
@@ -30,8 +31,8 @@ class Utils(commands.Cog):
         self.bot = bot
         with open('config.json', 'r') as fichier:
             self.config = json.load(fichier)
-        self.phab = Phabricator(host=self.config['phab']['host'], token=self.config['phab']['token'])
-        self.phab.update_interfaces()
+        # self.phab = Phabricator(host=self.config['phab']['host'], token=self.config['phab']['token'])
+        # self.phab.update_interfaces()
 
 
     @commands.command()
@@ -96,7 +97,7 @@ class Utils(commands.Cog):
         await ctx.send(embed=embed)
 
 
-    @commands.command()
+    @commands.command(enabled=False)
     async def suggest(self, ctx, cat:str="None", *, name:str="None"):
         '''Permet de mettre une suggestion sur un des boards Phabricator du serveur'''
         if cat == "None":
@@ -119,7 +120,7 @@ class Utils(commands.Cog):
                         "value": self.config['phab']['arrivals']
                     }
                 ]
-                self.phab.maniphest.edit(transactions=respond)
+                # self.phab.maniphest.edit(transactions=respond)
             except Phabricator.APIError:
                 return await ctx.send("Erreur de l'API, merci de contacter l'administrateur du bot !")
             return await ctx.send("Votre suggestion pour le serveur à été transmis sur Phabricator, merci !")
@@ -139,7 +140,7 @@ class Utils(commands.Cog):
                         "value": self.config['phab']['arrivalb']
                     }
                 ]
-                self.phab.maniphest.edit(transactions=respond)
+                # self.phab.maniphest.edit(transactions=respond)
             except Phabricator.APIError:
                 return await ctx.send("Erreur de l'API, merci de contacter l'administrateur du bot !")
             return await ctx.send("Votre suggestion pour le bot à été transmis sur Phabricator, merci !")
@@ -148,7 +149,7 @@ class Utils(commands.Cog):
 
     
     @commands.command()
-    @commands.has_role(678972972802768896)
+    @utils.checks.iflevelisuporequal(3)
     async def speakgm(self, ctx, * , message:str="None"):
         """Parler via le bot en tant que Narateur"""
         if message == "None":
@@ -158,7 +159,7 @@ class Utils(commands.Cog):
     
 
     @commands.command()
-    @commands.has_role(678972972802768896)
+    @utils.checks.iflevelisuporequal(4)
     async def speakstaff(self, ctx, anon:str="None", *, message:str="None"):
         """Parler via le bot en tant que Staff"""
         if message == "None":
@@ -177,6 +178,13 @@ class Utils(commands.Cog):
         """Le bouton d'auto destruction"""
         await ctx.send("OK, je vais m'éteindre tranquillement !")
         await ctx.bot.logout()
+
+
+    @commands.command()
+    async def mylevel(self, ctx):
+        level = await utils.permissions.get_level_per_roles(ctx)
+        level = str(level)
+        await ctx.send("Votre niveau de permissions est: " + level)
 
 
 def setup(bot):

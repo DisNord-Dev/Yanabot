@@ -1,11 +1,10 @@
 import json
 import logging
 import mysql.connector
-
+with open('config.json', 'r') as fichier:
+        config = json.load(fichier)
 
 def init_connection():
-    with open('config.json', 'r') as fichier:
-        config = json.load(fichier)
     mydb = mysql.connector.connect(
     host=config['mysql']['host'],
     user=config['mysql']['user'],
