@@ -44,13 +44,13 @@ async def roll_stats(self, ctx, row:str="None"):
         logging.info(num)
         utils.dbutils.close_connection(mydb)
         if num <= 5:
-            return await ctx.send("<a:blobrainbowdanse:680102742714220625> | Réussite Critique !!!")
+            return await ctx.send("<a:blobrainbowdanse:680102742714220625> | Réussite Critique !!! ({}/{})".format(num, respond))
         elif num >= 95:
-            return await ctx.send("<a:catno:680102811740143624> | Echec Critique !!!")    
+            return await ctx.send("<a:catno:680102811740143624> | Echec Critique !!! ({}/{})".format(num, respond))
         elif respond > num:
-            return await ctx.send("<a:bongocat:680115938019901629> | Réussite !")
+            return await ctx.send("<a:bongocat:680115938019901629> | Réussite ! ({}/{})".format(num, respond))
         elif respond < num:
-            return await ctx.send("<a:clapnul:680115868004515934> | Echec !")
+            return await ctx.send("<a:clapnul:680115868004515934> | Echec ! ({}/{})".format(num, respond))
         
 
 async def get_and_verify_eligibility(self, ctx):
@@ -96,13 +96,13 @@ class Rolls(commands.Cog):
         """Faire une action simple avec un roll 100"""
         num = random.randrange(1, 100, 1)
         if num <= 5:
-            return await ctx.send("<a:blobrainbowdanse:680102742714220625> | Réussite Critique !!!")
+            return await ctx.send("<a:blobrainbowdanse:680102742714220625> | Réussite Critique !!! ({}/50)".format(num))
         elif num < 50:
-            return await ctx.send("<a:bongocat:680115938019901629> | Réussite !")
+            return await ctx.send("<a:bongocat:680115938019901629> | Réussite ! ({}/50)".format(num))
         elif num < 95:
-            return await ctx.send("<a:clapnul:680115868004515934> | Echec !")
+            return await ctx.send("<a:clapnul:680115868004515934> | Echec ! ({}/50)".format(num))
         elif num <= 100:
-            return await ctx.send("<a:catno:680102811740143624> | Echec Critique !!!")
+            return await ctx.send("<a:catno:680102811740143624> | Echec Critique !!! ({}/50)".format(num))
     
 
     @commands.group()

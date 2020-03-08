@@ -36,7 +36,8 @@ token = config['bot']['token']
 initial_extensions = ['jishaku',
                       'cogs.misc',
                       'cogs.actions',
-                      'cogs.rolls']
+                      'cogs.rolls',
+                      'cogs.staff']
 bot = commands.Bot(command_prefix=config['bot']['prefix'])
 
 
