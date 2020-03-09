@@ -77,7 +77,7 @@ class Staff(commands.Cog):
 Tous les membres du staff doivent fournir un petit phrase sur vos activités de la semaine passé, dans le but de maintenir un staff actif.
 Faillir à ce checkup vous expose à un strike (à partir de 3 strike ou de 4 strike pour un administrateur, vous risquer de voir vos privilèges révoquée.)
 
-Si vous êtes absent pendant cette période, merci de nous le dire également, on notera et on l'affichera au prochain checkup !
+Si vous êtes absent pendant une période, merci de nous le dire également, on notera et on l'affichera lors des prochains checkup !
 
 Cordialement,
 Un Resp. Staff pour Fantasya RP
