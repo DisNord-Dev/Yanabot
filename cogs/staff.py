@@ -69,6 +69,9 @@ class Staff(commands.Cog):
     @commands.command()
     @utils.checks.iflevelisuporequal(5)
     async def checkup(self, ctx):
+        guild = ctx.guild
+        role = guild.get_role(678973022379704330)
+        mention = role.mention
         message = """:notepad_spiral: __**C'est l'heure du checkup de la semaine !**__
 
 Tous les membres du staff doivent fournir un petit phrase sur vos activités de la semaine passé, dans le but de maintenir un staff actif.
@@ -79,7 +82,7 @@ Si vous êtes absent pendant cette période, merci de nous le dire également, o
 Cordialement,
 Un Resp. Staff pour Fantasya RP
 
-Ping: <@&678973022379704330>"""
+Ping: {}""".format(mention)
         channel = self.bot.get_channel(id=686149004978815007)
         await channel.send(message)
         await ctx.send(":white_check_mark: Checkup publié !")
