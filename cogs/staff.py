@@ -24,6 +24,8 @@ import utils.dbutils
 import utils.permissions
 
 async def apply_strike(self, ctx, type:str=None, staff:discord.Member=None, number:int=0, reason:str="None"):
+        guild = ctx.guild
+        logchannel = guild.get_channel(self.config['bot']['logchan'])
         idu = staff.id
         mydb = utils.dbutils.init_connection()
         mycursor = mydb.cursor()
@@ -52,9 +54,9 @@ async def apply_strike(self, ctx, type:str=None, staff:discord.Member=None, numb
         mydb.commit()
         await ctx.send(":ok_hand:")
         if type == "add":
-            await self.logchannel.send(":closed_book: Le staff {}#{} à reçu {} strike(s) par {}#{} pour la raison suivante: {}".format(staff.name, staff.discriminator, number, ctx.author.name, ctx.author.discriminator, reason))
+            await logchannel.send(":closed_book: Le staff {}#{} à reçu {} strike(s) par {}#{} pour la raison suivante: {}".format(staff.name, staff.discriminator, number, ctx.author.name, ctx.author.discriminator, reason))
         if type == "remove":
-            await self.logchannel.send(":green_book: Le staff {}#{} s'est vu enlevé {} strike(s) par {}#{} pour la raison suivante: {}".format(staff.name, staff.discriminator, number, ctx.author.name, ctx.author.discriminator, reason))
+            await logchannel.send(":green_book: Le staff {}#{} s'est vu enlevé {} strike(s) par {}#{} pour la raison suivante: {}".format(staff.name, staff.discriminator, number, ctx.author.name, ctx.author.discriminator, reason))
         utils.dbutils.close_connection(mydb)
 
 
@@ -65,28 +67,6 @@ class Staff(commands.Cog):
             self.config = json.load(fichier)
         self.logchannel = self.bot.get_channel(self.config['bot']['logchan'])
         
-
-    @commands.command()
-    @utils.checks.iflevelisuporequal(5)
-    async def checkup(self, ctx):
-        guild = ctx.guild
-        role = guild.get_role(678973022379704330)
-        mention = role.mention
-        message = """:notepad_spiral: __**C'est l'heure du checkup de la semaine !**__
-
-Tous les membres du staff doivent fournir un petit phrase sur vos activités de la semaine passé, dans le but de maintenir un staff actif.
-Faillir à ce checkup vous expose à un strike (à partir de 3 strike ou de 4 strike pour un administrateur, vous risquer de voir vos privilèges révoquée.)
-
-Si vous êtes absent pendant une période, merci de nous le dire également, on notera et on l'affichera lors des prochains checkup !
-
-Cordialement,
-Un Resp. Staff pour Fantasya RP
-
-Ping: {}""".format(mention)
-        channel = self.bot.get_channel(id=686149004978815007)
-        await channel.send(message)
-        await ctx.send(":white_check_mark: Checkup publié !")
-
 
     @commands.command()
     @utils.checks.iflevelisuporequal(5)
