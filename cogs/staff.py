@@ -25,7 +25,7 @@ import utils.permissions
 
 async def apply_strike(self, ctx, type:str=None, staff:discord.Member=None, number:int=0, reason:str="None"):
         guild = ctx.guild
-        logchannel = guild.get_channel(self.config['bot']['logchan'])
+        logchannel = self.bot.get_channel(self.config['bot']['logchan'])
         idu = staff.id
         mydb = utils.dbutils.init_connection()
         mycursor = mydb.cursor()
